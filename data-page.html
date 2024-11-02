@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">  <!-- 문서의 문자 인코딩을 UTF-8로 설정함 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 뷰포트 설정, 모바일 친화적으로 만듦 -->
+    <title>Button Click Example</title>  <!-- 문서 제목 설정함 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;  /* 폰트 설정함 */
+            background-color: #f4f4f4;  /* 배경색 설정함 */
+            color: #333;  /* 텍스트 색 설정함 */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .button-container {
+            text-align: center;  /* 버튼 컨테이너를 가운데 정렬함 */
+            margin-bottom: 20px;  /* 아래쪽 여백 설정함 */
+        }
+
+        .button-container button {
+            background-color: #007BFF;  /* 버튼 배경색 설정함 */
+            border: none;
+            color: white;  /* 버튼 텍스트 색 설정함 */
+            padding: 10px 20px;
+            text-align: center;  /* 텍스트 가운데 정렬함 */
+            text-decoration: none;
+            display: inline-block;  /* 버튼을 인라인 블록 요소로 만듦 */
+            font-size: 16px;  /* 폰트 크기 설정함 */
+            margin: 4px 2px;
+            cursor: pointer;  /* 커서 모양 설정함 */
+            border-radius: 5px;  /* 버튼 테두리 둥글게 설정함 */
+            transition: background-color 0.3s ease;  /* 배경색 전환 시간 설정함 */
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;  /* 버튼 호버 시 배경색 설정함 */
+        }
+
+        .content {
+            display: none;  /* 초기 상태에서는 컨텐츠를 숨김 */
+            background-color: white;  /* 컨텐츠 배경색 설정함 */
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;  /* 테두리 설정함 */
+            border-radius: 5px;  /* 테두리 둥글게 설정함 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 그림자 효과 설정함 */
+        }
+
+        .content h2 {
+            margin-top: 0;  /* 제목의 상단 여백 제거함 */
+        }
+
+        .content table {
+            width: 100%;  /* 테이블 너비를 100%로 설정함 */
+            border-collapse: collapse;  /* 테두리를 겹치지 않게 함 */
+            margin-top: 20px;
+        }
+
+        .content th, .content td {
+            border: 1px solid #ddd;  /* 테두리 설정함 */
+            padding: 8px;
+        }
+
+        .content th {
+            background-color: #f2f2f2;  /* 헤더 배경색 설정함 */
+            text-align: left;  /* 헤더 텍스트 왼쪽 정렬함 */
+        }
+
+        .content tr:nth-child(even) {
+            background-color: #f9f9f9;  /* 짝수 행 배경색 설정함 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="button-container">
+    <button onclick="window.location='../prototype.html'">이전 페이지</button>  <!-- 이전 페이지로 이동하는 버튼 -->
+    <button onclick="showContent(1)">건물 정보</button>  <!-- 건물 정보 표시 버튼 -->
+    <button onclick="showContent(2)">경보기 정보</button>  <!-- 경보기 정보 표시 버튼 -->
+    <button onclick="showContent(3)">A구역 화재기록</button>  <!-- A구역 화재기록 표시 버튼 -->
+    <button onclick="showContent(4)">B구역 화재기록</button>  <!-- B구역 화재기록 표시 버튼 -->
+    <button onclick="showContent(5)">C구역 화재기록</button>  <!-- C구역 화재기록 표시 버튼 -->
+    <button onclick="showContent(6)">D구역 화재기록</button>  <!-- D구역 화재기록 표시 버튼 -->
+</div>
+
+<div id="content1" class="content">
+    <table id="table1"></table>  <!-- 건물 정보 테이블 -->
+</div>
+
+<div id="content2" class="content">
+    <table id="table2"></table>  <!-- 경보기 정보 테이블 -->
+</div>
+
+<div id="content3" class="content">
+    <table id="table3"></table>  <!-- A구역 화재기록 테이블 -->
+</div>
+
+<div id="content4" class="content">
+    <table id="table4"></table>  <!-- B구역 화재기록 테이블 -->
+</div>
+
+<div id="content5" class="content">
+    <table id="table5"></table>  <!-- C구역 화재기록 테이블 -->
+</div>
+
+<div id="content6" class="content">
+    <table id="table6"></table>  <!-- D구역 화재기록 테이블 -->
+</div>
+
+<script>
+    async function showContent(number) {
+        // 모든 content 요소를 숨김
+        var contents = document.querySelectorAll('.content');  // 모든 content 클래스를 가진 요소를 선택함
+        contents.forEach(function(content) {
+            content.style.display = 'none';  // 모든 content 요소를 숨김
+        });
+
+        // 클릭한 버튼에 해당하는 content 요소를 표시
+        var contentToShow = document.getElementById('content' + number);  // 표시할 content 요소 선택함
+        if (contentToShow) {
+            contentToShow.style.display = 'block';  // 선택한 content 요소를 표시함
+        }
+
+        // 데이터 가져오기
+        try {
+            const response = await fetch(`/data/${number}`);  // 서버에서 데이터를 가져옴
+            const data = await response.json();  // JSON 형태로 데이터를 파싱함
+
+            // 데이터를 표시할 테이블 요소에 삽입
+            const tableElement = document.getElementById('table' + number);  // 데이터를 삽입할 테이블 요소 선택함
+            if (tableElement) {
+                // 테이블 초기화
+                tableElement.innerHTML = '';  // 기존의 테이블 내용을 초기화함
+
+                // 테이블 헤더 추가
+                let headers;
+                switch(number) {
+                    case 1:
+                        headers = ['bldnum', 'bldadd', 'bldname', 'bldfloors', 'bldarea', 'bldcate', 'bldexit', 'bldsensor'];  // 건물 정보 헤더
+                        break;
+                    case 2:
+                        headers = ['sennum', 'senplace', 'senfloors', 'bldnum'];  // 경보기 정보 헤더
+                        break;
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        headers = ['firenum', 'fireday', 'firetem', 'firehum', 'sennum', 'firecheck'];  // 화재기록 헤더
+                        break;
+                    default:
+                        headers = [];
+                }
+                
+                // 테이블 헤더 추가
+                const thead = document.createElement('thead');  // 테이블 헤더 요소 생성함
+                const headerRow = document.createElement('tr');  // 헤더 행 생성함
+                headers.forEach(header => {
+                    const th = document.createElement('th');  // 헤더 셀 생성함
+                    th.textContent = header;  // 헤더 셀에 텍스트 삽입함
+                    headerRow.appendChild(th);  // 헤더 행에 헤더 셀 추가함
+                });
+                thead.appendChild(headerRow);  // 테이블 헤더에 헤더 행 추가함
+                tableElement.appendChild(thead);  // 테이블에 테이블 헤더 추가함
+
+                // 테이블 바디 추가
+                const tbody = document.createElement('tbody');  // 테이블 바디 요소 생성함
+                data.forEach(row => {
+                    const tr = document.createElement('tr');  // 테이블 행 생성함
+                    headers.forEach(header => {
+                        const td = document.createElement('td');  // 테이블 셀 생성함
+                        td.textContent = row[header];  // 셀에 데이터 삽입함
+                        tr.appendChild(td);  // 행에 셀 추가함
+                    });
+                    tbody.appendChild(tr);  // 테이블 바디에 행 추가함
+                });
+                tableElement.appendChild(tbody);  // 테이블에 테이블 바디 추가함
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);  // 데이터 가져오기 실패 시 오류 메시지 출력함
+        }
+    }
+
+    // 페이지가 로드될 때 1번 데이터를 표시
+    window.onload = function() {
+        showContent(1);  // 초기 페이지 로드 시 1번 데이터를 표시함
+    }
+</script>
+
+</body>
+</html>
